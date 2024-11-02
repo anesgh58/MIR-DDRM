@@ -320,35 +320,16 @@ class Diffusion(object):
             pdf = lambda x: torch.exp(torch.Tensor([-0.5 * (x/sigma)**2]))
             kernel1 = torch.Tensor([pdf(-4), pdf(-3), pdf(-2), pdf(-1), pdf(0), pdf(1), pdf(2), pdf(3), pdf(4)]).to(self.device)
             H_funcs = Deblurring2D(kernel1 / kernel1.sum(), kernel2 / kernel2.sum(), config.data.channels, self.config.data.image_size, self.device)
-           
-            
-        
-        elif deg == 'deblur_us':
-          from functions.svd_replacement import Deblurring2D
-          us_data = scipy.io.loadmat(os.path.join(args.exp, 'psf', 'psf_est_4.mat'))
-          kernel1 = torch.tensor(us_data['u']).to(self.device)
-          kernel2 = torch.tensor(us_data['v']).to(self.device)
-          H_funcs = Deblurring2D(kernel1, kernel2, config.data.channels, self.config.data.image_size, self.device)
-          
+
         elif deg == 'deblur_bccb':
             from functions.svd_replacement import deconvolution_BCCB
-            psf = scipy.io.loadmat('psf.mat') 
-            kernel = psf['psf']
-            #BCCB_data = scipy.io.loadmat('BCCB_simuUS_cyst.mat')          
-            #kernel = BCCB_data['H_BCCB_estim']
-            #U = BCCB_data['U']
-            #S = BCCB_data['D']
-            #V = BCCB_data['V']
-            '''
-            with h5py.File('BCCB_simuUS_cyst.mat', 'r') as f:
-              
-              # Access a specific dataset (replace 'dataset_name' with the actual name)
-              kernel = f['H_BCCB_estim'][:]
-              U = f['U'][:]
-              S = f['D'][:]
-              V = f['V'][:]
-              '''
-          
+            sigma = 20
+            kernel_size = 20
+            x_values = torch.linspace(-3 * sigma, 3 * sigma, steps=kernel_size)  
+            pdf = lambda x: torch.exp(torch.Tensor([-0.5 * (x/sigma)**2]))
+            kernel_1d = pdf(x_values)
+            kernel_1d = kernel_1d/kernel_1d.sum()
+            kernel = kernel_1d.view(-1, 1) @ kernel_1d.view(1, -1)
             H_funcs = deconvolution_BCCB( kernel, self.device)
             blur_by = 1
         
@@ -380,17 +361,10 @@ class Diffusion(object):
 
             if self.config.model.degradation:
                 y_0 = H_funcs.H(x_orig)
-                #import scipy.io
-                #scipy.io.savemat('img_pinv.mat', {'img_pinv': H_funcs.H_pinv(y_0).view( 512,512,3).detach().cpu().numpy()})
                 
                 
             else:
                 y_0 = x_orig.clone() # already degraded
-
-            #y_0, sigma_0 = add_AWGN(y_0, sigma_0/2)
-            
-            #print(sigma_0/2)
-            #breakpoint()
 
             y_0 = y_0 + sigma_0 * torch.randn_like(y_0)
 
@@ -447,9 +421,7 @@ class Diffusion(object):
             idx_so_far += y_0.shape[0]
             if self.config.model.known_GT:
                 pbar.set_description("PSNR: %.2f" % (avg_psnr / (idx_so_far - idx_init)))
-        
-        #scipy.io.savemat(os.path.join(folder_path, 'x0_preds.mat'), {'x0_preds': x0_preds})
-        
+                
         if self.config.model.known_GT:
             psnr_cpu = [p.cpu().numpy() for p in psnr_list]
             scipy.io.savemat(os.path.join(folder_path, 'psnr_values.mat'), {'psnr': psnr_cpu})
