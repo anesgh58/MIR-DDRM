@@ -94,7 +94,7 @@ class ImageDataset(data.Dataset):
     def __getitem__(self, idx):
         # filename = self.root_dir + '/' + self.metas[idx][0]
         base_filename = os.path.splitext(self.metas[idx][0])[0]  # Remove existing extension
-        filename = self.root_dir + '/' + base_filename + '.png'   # Add .png extension
+        filename = self.root_dir + '/' + base_filename + '.jpg'   # Add .png extension
         cls = self.metas[idx][1]
         img = default_loader(filename)
 

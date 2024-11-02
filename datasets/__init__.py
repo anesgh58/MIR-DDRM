@@ -184,217 +184,34 @@ def get_dataset(args, config):
             )
             test_dataset = dataset
 
-    elif config.data.dataset == 'Bulles':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset(os.path.join(args.exp, 'datasets', 'bulles_silico'),
-                               os.path.join(args.exp, 'Bulles_1k.txt'),
-                               image_size=config.data.image_size,
-                               normalize=False)
-        test_dataset = dataset
-        
-    elif config.data.dataset == 'In Silico':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/insilico_128_patches",
-                               os.path.join(args.exp, 'insilico_128_patches.txt'),
-                               image_size=config.data.image_size//2,
-                               normalize=False)
-        test_dataset = dataset
-
-
-    elif config.data.dataset == 'In silico wt':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/in_silico_wt_test/",
-                               os.path.join(args.exp, 'in_silico_test.txt'),
-                               image_size=config.data.image_size,
-                               normalize=False)
-        test_dataset = dataset
-        #Bulles_1k.txt
+    
 
     
-    elif config.data.dataset == 'ImageNet':
+    elif config.data.dataset == 'ImageNet_256':
         from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/ImageNet",
-                               os.path.join(args.exp, 'imagenet_val_1k.txt'),
+        dataset = ImageDataset(os.path.join(args.exp, 'datasets', 'imagenet'),
+                               os.path.join(args.exp, 'imagenet.txt'),
                                image_size=config.data.image_size,
                                normalize=False)
         test_dataset = dataset
 
-    elif config.data.dataset == 'In vivo 1':
+    elif config.data.dataset == 'ImageNet_512':
         from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/invivo_2_degraded",
-                                    os.path.join(args.exp, 'invivo_2.txt'),
-                                    image_size=config.data.image_size//4,
-                                    normalize=False)
-        test_dataset = dataset
-    
-    elif config.data.dataset == 'In Silico on vivo 1':
-        from datasets.imagenet_subset import ImageDataset        
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/invivo_1",
-                               os.path.join(args.exp, 'invivo_1.txt'),
+        dataset = ImageDataset(os.path.join(args.exp, 'datasets', 'imagenet'),
+                               os.path.join(args.exp, 'imagenet.txt'),
                                image_size=config.data.image_size,
                                normalize=False)
-        
         test_dataset = dataset
 
-    elif config.data.dataset == 'In vivo on silico':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/in_silico_degraded",
-                                    os.path.join(args.exp, 'In_Silico.txt'),
-                                    image_size=config.data.image_size,
-                                    normalize=False)
-        test_dataset = dataset
-
-    elif config.data.dataset == 'ImageNet on silico':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/insilico_256",
-                                    os.path.join(args.exp, 'In_Silico.txt'),
-                                    image_size=config.data.image_size,
-                                    normalize=False)
-        test_dataset = dataset
-
-    elif config.data.dataset == 'ImageNet on vivo':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/invivo1_256",
-                                    os.path.join(args.exp, 'invivo_1.txt'),
-                                    image_size=config.data.image_size,
-                                    normalize=False)
-        test_dataset = dataset
-
-    elif config.data.dataset == 'ImageNet on data_silico':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/data_256",
-                                    os.path.join(args.exp, 'data_insilico.txt'),
-                                    image_size=config.data.image_size,
-                                    normalize=False)
-        test_dataset = dataset
-
-    elif config.data.dataset == 'silico on data_silico':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/data_112",
-                                    os.path.join(args.exp, 'data_insilico.txt'),
-                                    image_size=config.data.image_size,
-                                    normalize=False)
-        test_dataset = dataset
-
-    elif config.data.dataset == 'vivo on data_silico':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/data_256",
-                                    os.path.join(args.exp, 'data_insilico.txt'),
-                                    image_size=config.data.image_size,
-                                    normalize=False)
-        test_dataset = dataset
-        
-    elif config.data.dataset == 'insilico_patches':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/insilico_128_patches",
-                                    os.path.join(args.exp, 'insilico_128_patches.txt'),
-                                    image_size=config.data.image_size//8,
-                                    normalize=False)
-        test_dataset = dataset
-        
-    elif config.data.dataset == 'invivo_patches':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/invivo_patch_images_2",
-                                    os.path.join(args.exp, 'invivo_patch_2.txt'),
-                                    image_size=config.data.image_size//2,
-                                    normalize=False)
-        test_dataset = dataset
-        
-    elif config.data.dataset == 'imagenet_on_insilico_patches':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/insilico_128_patches",
-                                    os.path.join(args.exp, 'insilico_128_patches.txt'),
-                                    image_size=config.data.image_size//8,
-                                    normalize=False)
-        test_dataset = dataset
-        
-    elif config.data.dataset == 'imagenet_on_invivo_patches':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/invivo_1_filtered",
-                                    os.path.join(args.exp, 'vivo_patches.txt'),
-                                    image_size=config.data.image_size//2,
-                                    normalize=False)
-        test_dataset = dataset
-        
-    elif config.data.dataset == 'imagenet_on_all_insilico_patches':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/insilico_patch_images",
-                                    os.path.join(args.exp, 'insilico_all_patches.txt'),
-                                    image_size=config.data.image_size//8,
-                                    normalize=False)
-        test_dataset = dataset
-
-    elif config.data.dataset == 'imagenet_on_all_insilico_patches_2':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/insilico_patch_images",
-                                    os.path.join(args.exp, 'insilico_all_patches_2.txt'),
-                                    image_size=config.data.image_size//8,
-                                    normalize=False)
-        test_dataset = dataset
-
-    elif config.data.dataset == 'imagenet_on_all_insilico_patches_3':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/insilico_patch_images",
-                                    os.path.join(args.exp, 'insilico_all_patches_3.txt'),
-                                    image_size=config.data.image_size//8,
-                                    normalize=False)
-        test_dataset = dataset
-
-    elif config.data.dataset == 'imagenet_on_all_insilico_patches_4':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/insilico_patch_images",
-                                    os.path.join(args.exp, 'insilico_all_patches_4.txt'),
-                                    image_size=config.data.image_size//8,
-                                    normalize=False)
-        test_dataset = dataset
-        
-    elif config.data.dataset == 'imagenet_on_all_vivo_patches':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/invivo_patch_images/images",
-                                    os.path.join(args.exp, 'invivo_patch.txt'),
-                                    image_size=config.data.image_size//8,
-                                    normalize=False)
-        test_dataset = dataset
-        
-    elif config.data.dataset == 'imagenet_on_all_vivo_patches_2':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/invivo_patch_images/images",
-                                    os.path.join(args.exp, 'invivo_patch_2.txt'),
-                                    image_size=config.data.image_size//8,
-                                    normalize=False)
-        test_dataset = dataset
-        
-    elif config.data.dataset == 'imagenet_on_all_vivo_patches_3':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/invivo_patch_images/images",
-                                    os.path.join(args.exp, 'invivo_patch_3.txt'),
-                                    image_size=config.data.image_size//8,
-                                    normalize=False)
-        test_dataset = dataset
-        
-    elif config.data.dataset == 'imagenet_on_all_vivo_patches_4':
-        from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/invivo_patch_images/images",
-                                    os.path.join(args.exp, 'invivo_patch_4.txt'),
-                                    image_size=config.data.image_size//8,
-                                    normalize=False)
-        test_dataset = dataset
         
     elif config.data.dataset == 'us_images':
         from datasets.imagenet_subset import ImageDataset
-        dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/simu_ref",
-                                    os.path.join(args.exp, 'simu_ref_1.txt'),
+        dataset = ImageDataset(os.path.join(args.exp, 'datasets', 'us_images'),
+                                    os.path.join(args.exp, 'deblur_us.txt'),
                                     image_size=config.data.image_size,
                                     normalize=False)
         test_dataset = dataset
         
-    #elif config.data.dataset == 'us_images':
-     #   from datasets.imagenet_subset import ImageDataset
-      #  dataset = ImageDataset("/projects/minds/aghouli-M2/Data_Super_Res_DM/simu_1_patches",
-       #                             os.path.join(args.exp, 'simu_1_patches.txt'),
-        #                            image_size=config.data.image_size//8,
-         #                           normalize=False)
-       # test_dataset = dataset
         
 
     else:
