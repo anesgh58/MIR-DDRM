@@ -3,8 +3,6 @@ import torch
 import numbers
 import torchvision.transforms as transforms
 import torchvision.transforms.functional as F
-from datasets.celeba import CelebA
-from datasets.lsun import LSUN
 from torch.utils.data import Subset
 import numpy as np
 import torchvision
