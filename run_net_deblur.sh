@@ -13,7 +13,7 @@
 #SBATCH --mail-user=aghouli@irit.fr
 
 
-srun singularity exec /apps/containerCollections/CUDA12/pytorch2-NGC-24-02.sif /projects/minds/aghouli-M2/mon_env/bin/python "/projects/minds/aghouli-M2/DDRM/main.py" --ni --config deblur_us.yml --doc imagenet_ood --timesteps 20 --eta 0.85 --etaB 1 --deg deblur_bccb --sigma_0 0.0125 -i deblur_us_sigma_0
+srun singularity exec /apps/containerCollections/CUDA12/pytorch2-NGC-24-02.sif /projects/minds/aghouli-M2/mon_env/bin/python "/main.py" --ni --config deblur_us.yml --doc imagenet_ood --timesteps 20 --eta 0.85 --etaB 1 --deg deblur_bccb --sigma_0 0.0125 -i deblur_us_sigma_0
 
 
 
