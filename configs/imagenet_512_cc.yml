@@ -1,5 +1,5 @@
 data:
-    dataset: "ImageNet"
+    dataset: "ImageNet_512"
     image_size: 128
     channels: 3
     logit_transform: false
