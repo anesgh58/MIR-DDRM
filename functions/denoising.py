@@ -48,7 +48,7 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
         init_y[:, large_singulars_index[0]] = U_t_y[:, large_singulars_index[0]] / singulars[
             large_singulars_index].reshape(1, -1)
 
-        init_y = init_y.reshape(x.shape[1], x.shape[2], x.shape[3])
+        init_y = init_y.reshape(x.shape[0], x.shape[1], x.shape[2], x.shape[3])
         remaining_s = largest_sigmas.view(-1, 1) ** 2 - inv_singulars_and_zero ** 2
 
         if remaining_s.dtype == torch.complex128:
