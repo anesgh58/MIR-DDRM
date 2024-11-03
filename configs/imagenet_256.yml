@@ -7,7 +7,7 @@ data:
     gaussian_dequantization: false
     random_flip: true
     rescaled: true
-    num_workers: 4
+    num_workers: 1
     subset_1k: True
     out_of_dist: False
 
