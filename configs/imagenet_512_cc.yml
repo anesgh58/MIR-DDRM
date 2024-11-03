@@ -1,14 +1,14 @@
 data:
     dataset: "ImageNet_512"
-    image_size: 128
+    image_size: 512
     channels: 3
     logit_transform: false
     uniform_dequantization: false
     gaussian_dequantization: false
     random_flip: true
     rescaled: true
-    num_workers: 32
-    subset_1k: True
+    num_workers: 1
+    subset_1k: False
     out_of_dist: False
 
 model:
@@ -28,14 +28,14 @@ model:
     num_heads_upsample: -1
     var_type: 'fixedsmall'
     num_head_channels: 64
-    image_size: 128
+    image_size: 512
     class_cond: True
     use_new_attention_order: false
-    degradation: true
-    known_GT: true
+    degradation: True
+    known_GT: True
 
 classifier:
-    image_size: 128
+    image_size: 512
     classifier_attention_resolutions: "32,16,8"
     classifier_depth: 2
     classifier_pool: "attention"
