@@ -294,10 +294,6 @@ class deconvolution_BCCB(H_functions):
         sing_values = (torch.tensor((np.fft.fft2(shifted_hest)), device='cuda'))
         sing_values = sing_values.unsqueeze(2).expand(-1, -1, self.channels).permute(2, 0, 1) # [C,H,W]
 
-        # import scipy.io
-        # scipy.io.savemat('sing.mat', {'sing':torch.tensor((np.fft.fft2(shifted_hest)), device='cuda').T.unsqueeze(0).detach().cpu().numpy(), 'sing_3c': torch.tensor((np.fft.fft2(shifted_hest)), device='cuda').T.unsqueeze(0).repeat(3, 1, 1).detach().cpu().numpy()})
-
-        # colomn wise vectorization
         return sing_values.reshape(-1)
 
     def H(self, vec):
@@ -306,12 +302,8 @@ class deconvolution_BCCB(H_functions):
         """
         temp = self.Vt(vec)
         singulars = self.singulars()
-        S_Vt = (singulars * temp[:, :singulars.shape[0]]).reshape(1,self.channels,self.dim, self.dim)
+        S_Vt = (singulars * temp[:, :singulars.shape[0]]).reshape(vec.shape[0],self.channels,self.dim, self.dim)
         output = self.U(S_Vt)
-        import scipy.io
-        scipy.io.savemat('H_values_bccb.mat',
-                         {'Vt': temp.reshape(self.dim, self.dim,self.channels).permute(1,0,2).detach().cpu().numpy(), 'singulars': singulars.detach().cpu().numpy(),
-                          'output': output.reshape(self.dim, self.dim,self.channels).permute(1,0,2).detach().cpu().numpy(), 'vec': vec.reshape(self.dim, self.dim,self.channels).detach().cpu().numpy()})
         return output
 
     def Ht(self, vec):
@@ -335,12 +327,9 @@ class deconvolution_BCCB(H_functions):
         inv_singulars = torch.where(torch.isinf(inv_singulars), torch.tensor(1000.0), inv_singulars)
 
         temp[:, :singulars.shape[0]] = (temp[:, :singulars.shape[0]] * inv_singulars)
-        temp = temp.view(1,3,512,512)
+        temp = temp.view(vec.shape[0],self.channels,self.dim, self.dim)
         output = self.V(temp)
-        import scipy.io
-        scipy.io.savemat('H_values.mat',
-                         {'Vt': temp.detach().cpu().numpy(), 'singulars': inv_singulars.detach().cpu().numpy(),
-                          'output': output.detach().cpu().numpy()})
+
         
         return self.V(temp)
 
