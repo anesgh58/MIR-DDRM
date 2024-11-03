@@ -23,7 +23,7 @@ from guided_diffusion.script_util import create_model,create_model_2, create_cla
 
 import random
 import scipy.io
-import h5py
+# import h5py
 
 
 def add_AWGN(myimage, SNRdB):
@@ -326,8 +326,7 @@ class Diffusion(object):
             sigma = 20
             kernel_size = 20
             x_values = torch.linspace(-3 * sigma, 3 * sigma, steps=kernel_size)  
-            pdf = lambda x: torch.exp(torch.Tensor([-0.5 * (x/sigma)**2]))
-            kernel_1d = pdf(x_values)
+            kernel_1d = torch.exp(-0.5 * (x_values / sigma) ** 2)
             kernel_1d = kernel_1d/kernel_1d.sum()
             kernel = kernel_1d.view(-1, 1) @ kernel_1d.view(1, -1)
             H_funcs = deconvolution_BCCB( kernel, self.device)
