@@ -328,13 +328,19 @@ class Diffusion(object):
 
         elif deg == 'deblur_bccb':
             from functions.svd_replacement import deconvolution_BCCB
-            sigma = 20
-            kernel_size = 20
-            x_values = torch.linspace(-3 * sigma, 3 * sigma, steps=kernel_size)
-            # Compute the 1D Gaussian kernel
-            kernel_1d = torch.exp(-0.5 * (x_values / sigma) ** 2)
-            kernel_1d = kernel_1d/kernel_1d.sum()
-            kernel = kernel_1d.view(-1, 1) @ kernel_1d.view(1, -1)
+
+            if config.data.dataset == 'us_images':
+                psf = scipy.io.loadmat('psf_GT_0.mat')
+                kernel = psf['psf_ref']
+            else:
+                sigma = 20
+                kernel_size = 20
+                x_values = torch.linspace(-3 * sigma, 3 * sigma, steps=kernel_size)
+                # Compute the 1D Gaussian kernel
+                kernel_1d = torch.exp(-0.5 * (x_values / sigma) ** 2)
+                kernel_1d = kernel_1d/kernel_1d.sum()
+                kernel = kernel_1d.view(-1, 1) @ kernel_1d.view(1, -1)
+
             H_funcs = deconvolution_BCCB( kernel,self.config.data.image_size, self.device)
             blur_by = 1
         

@@ -92,14 +92,21 @@ class ImageDataset(data.Dataset):
         return self.num
 
     def __getitem__(self, idx):
-        # filename = self.root_dir + '/' + self.metas[idx][0]
-        base_filename = os.path.splitext(self.metas[idx][0])[0]  # Remove existing extension
-        filename = self.root_dir + '/' + base_filename + '.jpg'   # Add .png extension
+        # Extract the base filename without an extension
+        base_filename = os.path.splitext(self.metas[idx][0])[0]
         cls = self.metas[idx][1]
-        img = default_loader(filename)
+
+        # Attempt to load the image with each possible extension
+        for ext in ['.jpg', '.JPEG', '.png']:
+            filename = os.path.join(self.root_dir, base_filename + ext)
+            if os.path.isfile(filename):
+                img = default_loader(filename)
+                break
+        else:
+            raise FileNotFoundError(f"No image found for {base_filename} with extensions .jpg, .JPEG, or .png")
 
         # transform
         if self.transform is not None:
             img = self.transform(img)
 
-        return img, cls #, self.metas[idx][0]
+        return img, cls
