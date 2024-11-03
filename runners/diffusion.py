@@ -335,7 +335,11 @@ class Diffusion(object):
             kernel_1d = torch.exp(-0.5 * (x_values / sigma) ** 2)
             kernel_1d = kernel_1d/kernel_1d.sum()
             kernel = kernel_1d.view(-1, 1) @ kernel_1d.view(1, -1)
-            H_funcs = deconvolution_BCCB( kernel, self.device)
+            val_loader_iter = iter(val_loader)  # Convert val_loader to an iterator
+            x_orig, classes = next(val_loader_iter)
+            print(x_orig.shape[1])
+            breakpoint()
+            H_funcs = deconvolution_BCCB( kernel,x_orig.shape[1], self.device)
             blur_by = 1
         
         elif deg[:2] == 'sr':

@@ -191,11 +191,11 @@ class Denoising(H_functions):
         return vec.clone().reshape(vec.shape[0], -1)
         
 class deconvolution_BCCB(H_functions):
-    def __init__(self, kernel, device):
+    def __init__(self, kernel, dim, device):
         self.kernel = kernel
         self.device = device
         self.channels = 3
-        self.dim = 512
+        self.dim = dim
 
     def to_tensor(self, vec):
         # Convert to tensor if it's a numpy array

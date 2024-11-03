@@ -17,11 +17,7 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
     with torch.no_grad():
         y_0 = y_0.reshape([x.shape[0],x.shape[1], x.shape[2], x.shape[3]])
         # setup vectors used in the algorithm
-        
-        #img_pinv = H_funcs.H_pinv(y_0)
-        
-        print(sigma_0)
-        
+
         singulars = H_funcs.singulars()
         Sigma = torch.zeros(x.shape[1] * x.shape[2] * x.shape[3], dtype=singulars.dtype, device=x.device)
         Sigma[:singulars.shape[0]] = singulars
@@ -45,10 +41,7 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
         # image = np.clip(image, 0, 1)  # Ensure values are between 0 and 1
 
         # Save the image using Matplotlib
-        print(image.shape)
-        plt.imsave('img_pinv.png', image)  # Transpose to (H, W, C)
-
-        # scipy.io.savemat('HX.mat', {'HX': H_funcs.H(y_0).detach().cpu().numpy(),'vec': y_0.detach().cpu().numpy()})
+        # plt.imsave('img_pinv.png', image)  # Transpose to (H, W, C)
 
         # initialize x_T as given in the paper
         largest_alphas = compute_alpha(b, (torch.ones(x.size(0)) * seq[-1]).to(x.device).long())
@@ -156,12 +149,6 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
             # If x is in (1, C, H, W) format, extract the image
             image = x_np[0]  # Get the first (and only) image in the batch
 
-            # Clip the values to [0, 1] for display
-            # image = np.clip(image, 0, 1)  # Ensure values are between 0 and 1
-
-            # Save the image using Matplotli b
-            plt.imsave('x0_t.png', image.transpose(1, 2, 0))  # Transpose to (H, W, C)
-
             # variational inference conditioned on y
             sigma = (1 - at).sqrt()[0, 0, 0, 0] / at.sqrt()[0, 0, 0, 0]
             sigma_next = (1 - at_next).sqrt()[0, 0, 0, 0] / at_next.sqrt()[0, 0, 0, 0]
@@ -180,11 +167,7 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
                 has_false_values = torch.any(~cond_before_lite)
                 cond_after_lite = torch.abs(singulars) < sigma_0/sigma_next
                 scipy.io.savemat('test.mat', {'singulars': torch.tensor(singulars).to(dtype=singulars.dtype).detach().cpu().numpy(),'sigma_0': torch.tensor(sigma_0).to(dtype=torch.float32).detach().cpu().numpy(), 'sigma_next': torch.tensor(sigma_next).to(dtype=torch.float32).detach().cpu().numpy()})
-               
-                # print(cond_before_lite)
-                print("Are there any False values?:",
-                      has_false_values.item())  # Convert to a Python boolean for printing
-                # print(cond_after_lite)
+
             else:
                 cond_before_lite = singulars * sigma_next > sigma_0
                 cond_after_lite = singulars * sigma_next < sigma_0
@@ -203,13 +186,6 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
 
             # missing pixels
             Vt_xt_mod_next = V_t_x0 + sigma_tilde_nextC * H_funcs.Vt(et_final) + std_nextC * torch.randn_like(V_t_x0)
-            print('et_final', et_final.shape)
-
-            # less noisy than y (after)
-            # print('sigma_0',sigma_0)
-            # print('((U_t_y - SVt_x0) / sigma_0)[:, cond_after_lite]',((U_t_y - SVt_x0) / sigma_0)[:, cond_after_lite])
-            # print(cond_after)
-            # print(cond_after.shape)
 
             Vt_xt_mod_next[:, cond_after] = V_t_x0[:, cond_after] + sigma_tilde_nextA * ((U_t_y - SVt_x0) / sigma_0)[:,
                                                                                         cond_after_lite] + std_nextA * torch.randn_like(
@@ -221,8 +197,6 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
                     U_t_y)[:, cond_before_lite])
 
             # aggregate all 3 cases and give next prediction
-            # print('Vt_xt_mod_next')
-            # print(Vt_xt_mod_next)
 
             if torch.isnan(Vt_xt_mod_next).any() or torch.isinf(Vt_xt_mod_next).any():
 
@@ -230,8 +204,6 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
             xt_mod_next = H_funcs.V(
                 Vt_xt_mod_next.view(x.shape[0], x.shape[1], x.shape[2], x.shape[3]))
 
-            # print('xt_mod_next')
-            # print(xt_mod_next)
             xt_next = (at_next.sqrt()[0, 0, 0, 0] * xt_mod_next).view(x.shape[0], x.shape[1], x.shape[2],x.shape[3])
 
             x0_preds.append(x0_t)
