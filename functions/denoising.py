@@ -127,7 +127,6 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
                 cond_before_lite = torch.abs(singulars) > sigma_0/sigma_next
                 has_false_values = torch.any(~cond_before_lite)
                 cond_after_lite = torch.abs(singulars) < sigma_0/sigma_next
-                scipy.io.savemat('test.mat', {'singulars': torch.tensor(singulars).to(dtype=singulars.dtype).detach().cpu().numpy(),'sigma_0': torch.tensor(sigma_0).to(dtype=torch.float32).detach().cpu().numpy(), 'sigma_next': torch.tensor(sigma_next).to(dtype=torch.float32).detach().cpu().numpy()})
 
             else:
                 cond_before_lite = singulars * sigma_next > sigma_0
