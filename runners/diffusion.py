@@ -337,9 +337,7 @@ class Diffusion(object):
             kernel = kernel_1d.view(-1, 1) @ kernel_1d.view(1, -1)
             val_loader_iter = iter(val_loader)  # Convert val_loader to an iterator
             x_orig, classes = next(val_loader_iter)
-            print(x_orig.shape[1])
-            breakpoint()
-            H_funcs = deconvolution_BCCB( kernel,x_orig.shape[1], self.device)
+            H_funcs = deconvolution_BCCB( kernel,x_orig.shape[2], self.device)
             blur_by = 1
         
         elif deg[:2] == 'sr':
