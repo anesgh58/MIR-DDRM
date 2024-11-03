@@ -156,16 +156,21 @@ class Diffusion(object):
             
             else:
                 ckpt = os.path.join(self.args.exp, "logs/imagenet/512x512_diffusion.pt")
+                if not os.path.exists(ckpt):
+                    download(
+                        'https://openaipublic.blob.core.windows.net/diffusion/jul-2021/512x512_diffusion.pt',
+                        ckpt)
             model.load_state_dict(torch.load(ckpt, map_location=self.device))
             model.to(self.device)
             model.eval()
             model = torch.nn.DataParallel(model)
             
             if self.config.model.class_cond:
-                ckpt = os.path.join(self.args.exp, 'logs/imagenet/%dx%d_classifier.pt' % (self.config.data.image_size, self.config.data.image_size))
+                ckpt = os.path.join(self.args.exp, "logs/imagenet/512x512_classifier.pt")
                 if not os.path.exists(ckpt):
-                    image_size = self.config.data.image_size
-                    download('https://openaipublic.blob.core.windows.net/diffusion/jul-2021/%dx%d_classifier.pt' % self.config.data.image_size, ckpt)
+                    download(
+                        'https://openaipublic.blob.core.windows.net/diffusion/jul-2021/512x512_classifier.pt',
+                        ckpt)
                 classifier = create_classifier(**args_to_dict(self.config.classifier, classifier_defaults().keys()))
                 classifier.load_state_dict(torch.load(ckpt, map_location=self.device))
                 classifier.to(self.device)
@@ -325,7 +330,8 @@ class Diffusion(object):
             from functions.svd_replacement import deconvolution_BCCB
             sigma = 20
             kernel_size = 20
-            x_values = torch.linspace(-3 * sigma, 3 * sigma, steps=kernel_size)  
+            x_values = torch.linspace(-3 * sigma, 3 * sigma, steps=kernel_size)
+            # Compute the 1D Gaussian kernel
             kernel_1d = torch.exp(-0.5 * (x_values / sigma) ** 2)
             kernel_1d = kernel_1d/kernel_1d.sum()
             kernel = kernel_1d.view(-1, 1) @ kernel_1d.view(1, -1)

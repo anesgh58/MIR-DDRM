@@ -14,3 +14,7 @@
 
 
 srun singularity exec /apps/containerCollections/CUDA12/pytorch2-NGC-24-02.sif /projects/minds/aghouli-M2/mon_env/bin/python "/main.py" --ni --config imagenet_512_cc.yml --doc imagenet_ood --timesteps 20 --eta 0.85 --etaB 1 --deg sr2 --sigma_0 0 -i imagenet_512_sigma_0
+
+
+
+
