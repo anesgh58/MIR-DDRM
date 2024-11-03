@@ -25,23 +25,6 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
         
         # U_t_y = U_t_y.reshape(x.shape[0], -1)
         Sig_inv_U_t_y = U_t_y / singulars[:U_t_y.shape[-1]]
-        
-        img_pinv = H_funcs.H_pinv(y_0.reshape(1,3,512,512))
-        
-        scipy.io.savemat('img_pinv.mat', {'img_pinv': img_pinv.view( 512,512,3).detach().cpu().numpy()})
-        
-        img_pinv = y_0.reshape(3,512,512)
-        
-        x_np = torch.real(torch.clamp((img_pinv.real + 1.0) / 2.0, 0.0, 1.0)).to(dtype=torch.float32).detach().cpu().numpy()
-
-        # If x is in (1, C, H, W) format, extract the image
-        image = x_np[0]  # Get the first (and only) image in the batch
-
-        # Clip the values to [0, 1] for display
-        # image = np.clip(image, 0, 1)  # Ensure values are between 0 and 1
-
-        # Save the image using Matplotlib
-        # plt.imsave('img_pinv.png', image)  # Transpose to (H, W, C)
 
         # initialize x_T as given in the paper
         largest_alphas = compute_alpha(b, (torch.ones(x.size(0)) * seq[-1]).to(x.device).long())
@@ -88,17 +71,6 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
 
         # setup iteration variables
         x = H_funcs.V(init_y).view(x.shape[0], x.shape[1], x.shape[2], x.shape[3])
-
-        x_np = torch.real(torch.clamp((x.real + 1.0) / 2.0, 0.0, 1.0)).to(dtype=torch.float32).detach().cpu().numpy()
-
-        # If x is in (1, C, H, W) format, extract the image
-        image = x_np[0]  # Get the first (and only) image in the batch
-
-        # Clip the values to [0, 1] for display
-        # image = np.clip(image, 0, 1)  # Ensure values are between 0 and 1
-
-        # Save the image using Matplotlib
-        plt.imsave('x.png', image.transpose(1, 2, 0))  # Transpose to (H, W, C)
 
         n = x.size(0)
         seq_next = [-1] + list(seq[:-1])
