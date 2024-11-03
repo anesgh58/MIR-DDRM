@@ -170,7 +170,4 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
             x0_preds.append(x0_t)
             xs.append(xt_next)
 
-        scipy.io.savemat('xt_next_bccb.mat', {'xt_next': torch.real(torch.clamp((xt_next.real + 1.0) / 2.0, 0.0, 1.0)).view(x.shape[2], x.shape[3], x.shape[1]).to(
-                dtype=torch.float32).detach().cpu().numpy()})
-
     return xs, x0_preds
