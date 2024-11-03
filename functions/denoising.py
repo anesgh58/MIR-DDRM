@@ -101,25 +101,15 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
                     et_imag = et_imag - (1 - at).sqrt()[0, 0, 0, 0] * cls_fn(torch.imag(xt).to(dtype=torch.float32), t,classes)
 
 
-            if et.size(1) == 6:
+            if et_final.size(1) == 6:
                 et_final = et_final[:, :3]
                 if singulars.dtype == torch.complex128:
                     et_imag = et_imag[:, :3]
 
             x0_t = (torch.real(xt) - et_final.to(xt.dtype) * (1 - at).sqrt()) / at.sqrt()
             if singulars.dtype == torch.complex128:
-                
                 x0_t_imag = torch.real((torch.imag(xt) - et_imag.to(xt.dtype) * (1 - at).sqrt()) / at.sqrt())
-                
-                
                 x0_t = x0_t + 1j * x0_t_imag
-                
-
-            x_np = torch.real(torch.clamp((x0_t.real + 1.0) / 2.0, 0.0, 1.0)).to(
-                dtype=torch.float32).detach().cpu().numpy()
-
-            # If x is in (1, C, H, W) format, extract the image
-            image = x_np[0]  # Get the first (and only) image in the batch
 
             # variational inference conditioned on y
             sigma = (1 - at).sqrt()[0, 0, 0, 0] / at.sqrt()[0, 0, 0, 0]
@@ -127,7 +117,6 @@ def efficient_generalized_steps(x, seq, model, b, H_funcs, y_0, sigma_0, etaB, e
             xt_mod = xt / at.sqrt()[0, 0, 0, 0]
 
             V_t_x = H_funcs.Vt(xt_mod)
-
             SVt_x = (V_t_x * Sigma)[:, :U_t_y.shape[1]]
             V_t_x0 = H_funcs.Vt(x0_t)
             SVt_x0 = (V_t_x0 * Sigma)[:, :U_t_y.shape[1]]
