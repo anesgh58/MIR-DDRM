@@ -15,6 +15,9 @@ python main.py --ni --config imagenet_512_cc.yml --doc imagenet_ood --timesteps 
 python main.py --ni --config deblur_us.yml --doc imagenet_ood --timesteps 20 --eta 0.85 --etaB 1 --deg deblur_bccb --sigma_0 0 -i deblur_us_sigma_0
 ```
 
+For a practical demonstration of the deconvolution process applied to photographic images, please refer to the Jupyter notebook located at `/MIR_DDRM.ipynb`. This notebook illustrates the application of the diffusion models used in this project, showcasing an example of the results obtained from the deconvolution process.
+
+
 ## References and Acknowledgements
 ```
 @inproceedings{anesgh58,
