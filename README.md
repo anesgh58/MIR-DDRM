@@ -1,5 +1,4 @@
-# MIR-DDRM
-**Medical Imaging Restoration via DDRM**
+# Medical Imaging Restoration via DDRM (MIR-DDRM)
 
 This project utilizes diffusion models to solve inverse problems in an unsupervised manner, building on the DDRM framework: [DDRM](https://github.com/bahjat-kawar/ddrm/tree/master). The degraded image experiences various degradations, including subsampling and blurring, alongside Gaussian noise corruption. The model aims to reconstruct and denoise the image from both observation and model noise by sampling in the SVD space of the degradation matrix. Pretrained models used for this purpose are sourced from [OpenAI - Guided Diffusion](https://github.com/openai/guided-diffusion), trained on the ImageNet dataset.
 
