@@ -1,11 +1,11 @@
 # MIR-DDRM
 **Medical Imaging Restoration via DDRM**
 
-This project utilizes diffusion models to address inverse problems in an unsupervised manner. Implemmentation is based on DDRM paper: ([DDRM](https://github.com/bahjat-kawar/ddrm/tree/master)). The degraded image undergoes several types of degradation, including subsampling and blurring, and is corrupted by Gaussian noise. The model aims to reconstruct the image while simultaneously denoising it from both observation noise and model noise. A single pretrained model is used for this purpose, with pretrained models sourced from: [Open AI - guided-diffusion](https://github.com/openai/guided-diffusion). The models are trained on the ImageNet dataset.
+This project utilizes diffusion models to solve inverse problems in an unsupervised manner, building on the DDRM framework: [DDRM](https://github.com/bahjat-kawar/ddrm/tree/master). The degraded image experiences various degradations, including subsampling and blurring, alongside Gaussian noise corruption. The model aims to reconstruct and denoise the image from both observation and model noise by sampling in the SVD space of the degradation matrix. Pretrained models used for this purpose are sourced from [OpenAI - Guided Diffusion](https://github.com/openai/guided-diffusion), trained on the ImageNet dataset.
 
-The contribution and novelty of this work lie in the application of the model to medical images characterized by BCCB impulse responses. In this context, Singular Value Decomposition (SVD) is replaced by spectral decomposition in the Fourier space.
+The novelty of this work lies in applying the model to medical images characterized by BCCB impulse responses, where Singular Value Decomposition (SVD) is replaced by spectral decomposition in the Fourier space.
 
-Refer to the author's original description in "Sampling from the model" for the different arguments used in the command line execution.
+Refer to the author's original description in "Pretrained models" and "Sampling from the model" for the arborescence of the code and command line execution arguments.
 
 ### Example Commands to Reconstruct Blurred Photographic and Ultrasound Images
 
