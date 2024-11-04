@@ -16,10 +16,11 @@ python main.py --ni --config deblur_us.yml --doc imagenet_ood --timesteps 20 --e
 ```
 
 ## References and Acknowledgements
-
+```
 @inproceedings{anesgh58,
     title={Medical Imaging Restoration via DDRM},
     author={Anes Ghouli, Duong Hung PHAM, and Denis KOUAME},
     booktitle={TBD},
     year={2024}
 }
+```
